@@ -60,17 +60,18 @@ with open(sys.argv[1], 'r') as csv_file:
 		# Extract names and spacing to the list names
 		names = []
 		for row in csv_data:
-			# Concatenate first and last name
-			name = row[0] + ' ' + row[1]
-			# If name is to long, truncate it.
-			if len(name) >= name_spacing :
-				name = name[0:name_spacing - 1]
-			# Spaces are inserted for uniform columns
-			name = '{:<{width}}'.format(name, width=name_spacing)
+			if((int(row[3]) > 0) and (int(row[4]) > 0) and (row[5] == 'Ok')):
+				# Concatenate first and last name
+				name = row[0] + ' ' + row[1]
+				# If name is to long, truncate it.
+				if len(name) >= name_spacing :
+					name = name[0:name_spacing - 1]
+				# Spaces are inserted for uniform columns
+				name = '{:<{width}}'.format(name, width=name_spacing)
 
-			# Add to list
-			names.append(name)
-			
+				# Add to list
+				names.append(name)
+		i = 0	
 		# Format the list in to columns and write to file
 		for i in range(0, len(names) - n_col + 1, n_col) :
 			for j in range(i, i + n_col):
