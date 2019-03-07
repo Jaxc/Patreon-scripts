@@ -55,7 +55,7 @@ with open(sys.argv[1], 'r') as csv_file:
 		# Read CSV data
 		csv_data = csv.reader(csv_file, delimiter=',')
 		# Skip header row
-		csv_data.next()
+		next(csv_data)
 		
 		# Extract names and spacing to the list names
 		names = []
