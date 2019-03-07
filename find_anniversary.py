@@ -15,40 +15,13 @@ import sys
 from datetime import datetime
 from datetime import timedelta
 
-# Default values for arguments
-name_spacing_default = 25
-n_col_default = 3
-
 # Print error fpr incorrect number of arguemnts
-if (len(sys.argv) < 2) or (len(sys.argv) > 4):
+if (len(sys.argv) != 2) :
 	print ("Incorrect number of arguments.")
 	print ("Correct usage:")
-	print ("parse_patron filename")
-	print ("parse_patron filename n_col")
-	print ("parse_patron filename n_col name_spacing")
-	print 
-	print ("n_col dictates how many columns the names shall be outputted as.")
-	print ("name_spacing dictates how many characters wide each row is. Names "
-			+ "longer than this will be truncated ")
-	print ("Unless overridden, the default values for n_col is " + 
-			str(n_col_default) + "and name_spacing is " + 
-			str(name_spacing_default))
-	print("Exiting")
+	print ("find_anniversary.py filename")
+	print ("Exiting")
 	exit()
-
-	
-# Set varaibles to default values unless specified
-if len(sys.argv) == 2:
-	name_spacing = name_spacing_default
-	n_col = n_col_default
-	
-if len(sys.argv) == 3:
-	name_spacing = name_spacing_default
-	n_col = int(sys.argv[2])
-	
-if len(sys.argv) == 4:
-	name_spacing = int(sys.argv[3])
-	n_col = int(sys.argv[2])
 
 this_month = datetime.today().replace(day=1)
 last_month = this_month - timedelta(days=1)

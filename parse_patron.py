@@ -20,9 +20,9 @@ n_col_default = 3
 if (len(sys.argv) < 2) or (len(sys.argv) > 4):
 	print ("Incorrect number of arguments.")
 	print ("Correct usage:")
-	print ("parse_patron filename")
-	print ("parse_patron filename n_col")
-	print ("parse_patron filename n_col name_spacing")
+	print ("parse_patron.py filename")
+	print ("parse_patron.py filename n_col")
+	print ("parse_patron.py filename n_col name_spacing")
 	print 
 	print ("n_col dictates how many columns the names shall be outputted as.")
 	print ("name_spacing dictates how many characters wide each row is. Names "
