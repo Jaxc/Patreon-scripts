@@ -51,16 +51,14 @@ if len(sys.argv) == 4:
 # Open input file
 with open(sys.argv[1], 'r') as csv_file:
 	# Open target file (will be overwritten)
-	with open('patons_out.txt', 'w') as file_out:
+	with open('patons_out.txt', 'w', newline='') as file_out:
 		# Read CSV data
 		csv_data = csv.reader(csv_file, delimiter=',')
-		# Skip header row
-		next(csv_data)
 		
 		# Extract names and spacing to the list names
 		names = []
 		for row in csv_data:
-			if((int(row[3]) > 0) and (int(row[4]) > 0) and (row[5] == 'Ok')):
+			if((float(row[3]) > 0.0) and (float(row[4]) > 0.0) and (row[5] == 'Ok')):
 				# Concatenate first and last name
 				name = row[0] + ' ' + row[1]
 				# If name is to long, truncate it.
@@ -76,11 +74,14 @@ with open(sys.argv[1], 'r') as csv_file:
 		for i in range(0, len(names) - n_col + 1, n_col) :
 			for j in range(i, i + n_col):
 				file_out.write(names[j])
-			file_out.write('\r\n')
+			file_out.write("\r\n")
 		
 		# Fix last row if number of names if it isn't evently divided by n_col
-		for j in range(i + n_col, len(names)):
-			file_out.write(names[j])
-			
+		if (len(names) < n_col) :
+			for j in range(i, len(names)):
+				file_out.write(names[j])
+		else :
+			for j in range(i + n_col, len(names)):
+				file_out.write(names[j])
 		# Add final line break
 		file_out.write('\r\n')

@@ -30,7 +30,7 @@ next_month = this_month + timedelta(days=32)
 # Open input file
 with open(sys.argv[1], 'r') as csv_file:
 	# Open target file (will be overwritten)
-	with open('anniversary_out.txt', 'w') as file_out:
+	with open('anniversary_out.txt', 'w', newline='') as file_out:
 		# Read CSV data
 		csv_data = csv.reader(csv_file, delimiter=',')
 		# Skip header row
@@ -46,7 +46,7 @@ with open(sys.argv[1], 'r') as csv_file:
 			# Extract patreon start date
 			patron_start = datetime.strptime(row[12], "%Y-%m-%d %H:%M:%S.%f")
 			# Make sure patreon is still subscribed
-			if((int(row[3]) > 0) and (int(row[4]) > 0) and (row[5] == 'Ok')):
+			if((float(row[3]) > 0) and (float(row[4]) > 0) and (row[5] == 'Ok')):
 				# Compare start against month
 				if patron_start.month == last_month.month :
 					# Calculate how many years since start
