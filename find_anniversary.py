@@ -33,40 +33,42 @@ with open(sys.argv[1], 'r') as csv_file:
 	with open('anniversary_out.txt', 'w', newline='') as file_out:
 		# Read CSV data
 		csv_data = csv.reader(csv_file, delimiter=',')
-		# Skip header row
-		next(csv_data)
 		
 		# Extract lists of users with anniversaries
 		last_month_anniversarys = []
 		this_month_anniversarys = []
 		next_month_anniversarys = []
+		
 		for row in csv_data:
 			# Extract name
 			name = row[0] + ' ' + row[1]
 			# Extract patreon start date
 			patron_start = datetime.strptime(row[12], "%Y-%m-%d %H:%M:%S.%f")
 			# Make sure patreon is still subscribed
-			if((float(row[3]) > 0) and (float(row[4]) > 0) and (row[5] == 'Ok')):
-				# Compare start against month
-				if patron_start.month == last_month.month :
-					# Calculate how many years since start
-					years_active = str(last_month.year - patron_start.year)
-					last_month_anniversarys.append(years_active + 
-					" year(s) on " + str(patron_start.month) + "-" + 
-					str(patron_start.day) + ": " + name + '\r\n')
-					
-				elif patron_start.month == this_month.month :
-					years_active = str(this_month.year - patron_start.year)
-					this_month_anniversarys.append(years_active + 
-					" year(s) on " + str(patron_start.month) + "-" + 
-					str(patron_start.day) + ": " + name + '\r\n')
-					
-				elif patron_start.month == next_month.month :
-					years_active = str(next_month.year - patron_start.year)
-					next_month_anniversarys.append(years_active + 
-					" year(s) on " + str(patron_start.month) + "-" + 
-					str(patron_start.day) + ": " + name + '\r\n')
-				
+			try : 
+				if((float(row[3]) > 0) and (float(row[4]) > 0) and (row[5] == 'Ok')):
+					# Compare start against month
+					if patron_start.month == last_month.month :
+						# Calculate how many years since start
+						years_active = str(last_month.year - patron_start.year)
+						last_month_anniversarys.append(years_active + 
+						" year(s) on " + str(patron_start.month) + "-" + 
+						str(patron_start.day) + ": " + name + '\r\n')
+						
+					elif patron_start.month == this_month.month :
+						years_active = str(this_month.year - patron_start.year)
+						this_month_anniversarys.append(years_active + 
+						" year(s) on " + str(patron_start.month) + "-" + 
+						str(patron_start.day) + ": " + name + '\r\n')
+						
+					elif patron_start.month == next_month.month :
+						years_active = str(next_month.year - patron_start.year)
+						next_month_anniversarys.append(years_active + 
+						" year(s) on " + str(patron_start.month) + "-" + 
+						str(patron_start.day) + ": " + name + '\r\n')
+			except:
+				# Error in row, could not parse
+				print(row)	
 			
 		# Format the list in to columns and write to file
 		file_out.write("Anniversaries this month: \r\n")
