@@ -15,20 +15,36 @@ import sys
 from datetime import datetime
 from datetime import timedelta
 
-# Print error fpr incorrect number of arguemnts
-if (len(sys.argv) != 2) :
-	print ("Incorrect number of arguments.")
-	print ("Correct usage:")
-	print ("find_anniversary.py filename")
-	print ("Exiting")
-	exit()
+# import configparser to parse the config file
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+if config.has_option('INPUT', 'INPUT_FILE') :
+	input_file = config['INPUT']['INPUT_FILE'];
+else :
+	# Error no input file name in config file.
+	print ("Error no INPUT_FILE under INPUT in config file.")
+	
+if config.has_option('OUTPUT', 'NAME_SPACING') :
+	name_spacing = int(config['OUTPUT']['NAME_SPACING']);
+else :
+	# Error no NAME_SPACING under OUTPUT in config file.
+	print ("Error no NAME_SPACING under OUTPUT in config file.")
+	
+if config.has_option('OUTPUT', 'N_COL') :
+	n_col = int(config['OUTPUT']['N_COL']);
+else :
+	# Error no N_COL under OUTPUT in config file.
+	print ("Error no N_COL under OUTPUT in config file.")
 
 this_month = datetime.today().replace(day=1)
 last_month = this_month - timedelta(days=1)
 next_month = this_month + timedelta(days=32)
 	
 # Open input file
-with open(sys.argv[1], 'r') as csv_file:
+with open(input_file, 'r') as csv_file:
 	# Open target file (will be overwritten)
 	with open('anniversary_out.txt', 'w', newline='') as file_out:
 		# Read CSV data

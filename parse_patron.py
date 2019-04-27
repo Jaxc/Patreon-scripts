@@ -11,45 +11,32 @@
 import csv
 # import sys for input arguments
 import sys
+# import configparser to parse the config file
+import configparser
 
-# Default values for arguments
-name_spacing_default = 25
-n_col_default = 3
+config = configparser.ConfigParser()
+config.read('config.ini')
 
-# Print error fpr incorrect number of arguemnts
-if (len(sys.argv) < 2) or (len(sys.argv) > 4):
-	print ("Incorrect number of arguments.")
-	print ("Correct usage:")
-	print ("parse_patron.py filename")
-	print ("parse_patron.py filename n_col")
-	print ("parse_patron.py filename n_col name_spacing")
-	print 
-	print ("n_col dictates how many columns the names shall be outputted as.")
-	print ("name_spacing dictates how many characters wide each row is. Names "
-			+ "longer than this will be truncated ")
-	print ("Unless overridden, the default values for n_col is " + 
-			str(n_col_default) + "and name_spacing is " + 
-			str(name_spacing_default))
-	print("Exiting")
-	exit()
+if config.has_option('INPUT', 'INPUT_FILE') :
+	input_file = config['INPUT']['INPUT_FILE'];
+else :
+	# Error no input file name in config file.
+	print ("Error no INPUT_FILE under INPUT in config file.")
+	
+if config.has_option('OUTPUT', 'NAME_SPACING') :
+	name_spacing = int(config['OUTPUT']['NAME_SPACING']);
+else :
+	# Error no NAME_SPACING under OUTPUT in config file.
+	print ("Error no NAME_SPACING under OUTPUT in config file.")
+	
+if config.has_option('OUTPUT', 'N_COL') :
+	n_col = int(config['OUTPUT']['N_COL']);
+else :
+	# Error no N_COL under OUTPUT in config file.
+	print ("Error no N_COL under OUTPUT in config file.")
 
-	
-# Set varaibles to default values unless specified
-if len(sys.argv) == 2:
-	name_spacing = name_spacing_default
-	n_col = n_col_default
-	
-if len(sys.argv) == 3:
-	name_spacing = name_spacing_default
-	n_col = int(sys.argv[2])
-	
-if len(sys.argv) == 4:
-	name_spacing = int(sys.argv[3])
-	n_col = int(sys.argv[2])
-
-	
 # Open input file
-with open(sys.argv[1], 'r') as csv_file:
+with open(input_file) as csv_file:
 	# Open target file (will be overwritten)
 	with open('patons_out.txt', 'w', newline='') as file_out:
 		# Read CSV data
