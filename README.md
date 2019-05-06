@@ -18,6 +18,7 @@ INPUT controls settings for the different tools. The current settings are:
 ### DEFAULT_INPUT
   This flag tells if the file is of the patreon export file name (PatreonReport_YYYY_MM_DD.csv)
   ```Y``` marks that the default name is used.
+  If several files are found, only the latest one (from date in file name) will be parsed.
   
   Default value: ```Y```
 ### INPUT_FILE
