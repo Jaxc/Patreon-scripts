@@ -11,49 +11,42 @@
 import csv
 # import sys for input arguments
 import sys
+# import os functions for file IO
+import os
+# import regex functions
+import re
+# import glob to filter csv files.
+import glob
+# import datetime to determine newest files
+import datetime
+# import shared functions
+from patreon_support_functions import * 
 
-# Default values for arguments
-name_spacing_default = 25
-n_col_default = 3
+# Read parameters from config.ini
+default_input = read_config_param('INPUT', 'DEFAULT_INPUT')
+input_file = read_config_param('INPUT', 'INPUT_FILE')
+name_spacing = int(read_config_param('PARSE_PATREON', 'NAME_SPACING'))
+n_col = int(read_config_param('PARSE_PATREON','N_COL'))
 
-# Print error fpr incorrect number of arguemnts
-if (len(sys.argv) < 2) or (len(sys.argv) > 4):
-	print ("Incorrect number of arguments.")
-	print ("Correct usage:")
-	print ("parse_patron.py filename")
-	print ("parse_patron.py filename n_col")
-	print ("parse_patron.py filename n_col name_spacing")
-	print 
-	print ("n_col dictates how many columns the names shall be outputted as.")
-	print ("name_spacing dictates how many characters wide each row is. Names "
-			+ "longer than this will be truncated ")
-	print ("Unless overridden, the default values for n_col is " + 
-			str(n_col_default) + "and name_spacing is " + 
-			str(name_spacing_default))
-	print("Exiting")
-	exit()
 
-	
-# Set varaibles to default values unless specified
-if len(sys.argv) == 2:
-	name_spacing = name_spacing_default
-	n_col = n_col_default
-	
-if len(sys.argv) == 3:
-	name_spacing = name_spacing_default
-	n_col = int(sys.argv[2])
-	
-if len(sys.argv) == 4:
-	name_spacing = int(sys.argv[3])
-	n_col = int(sys.argv[2])
+if default_input == 'Y':
+	path=os.getcwd()
+	csv_files = glob.glob('*.{}'.format('csv'))
+	patreon_reports_name = []
+	patreon_reports_date = []
+	for csv_file in csv_files :
+		standard_csv = re.search('PatreonReport_(\d{4}_\d{2}_\d{2})\.csv', csv_file)
+		if standard_csv is not None :
+			patreon_reports_date.append(datetime.datetime.strptime(standard_csv.group(1), '%Y_%m_%d'))
+	newest_date = max(patreon_reports_date)
+	input_file = newest_date.strftime("PatreonReport_%Y_%m_%d.csv")
 
-	
 # Open input file
-with open(sys.argv[1], 'r') as csv_file:
+with open(input_file) as csv_input_file:
 	# Open target file (will be overwritten)
 	with open('patons_out.txt', 'w', newline='') as file_out:
 		# Read CSV data
-		csv_data = csv.reader(csv_file, delimiter=',')
+		csv_data = csv.reader(csv_input_file, delimiter=',')
 		
 		# Extract names and spacing to the list names
 		names = []

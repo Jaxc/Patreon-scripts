@@ -15,20 +15,31 @@ import sys
 from datetime import datetime
 from datetime import timedelta
 
-# Print error fpr incorrect number of arguemnts
-if (len(sys.argv) != 2) :
-	print ("Incorrect number of arguments.")
-	print ("Correct usage:")
-	print ("find_anniversary.py filename")
-	print ("Exiting")
-	exit()
+# Read parameters from config.ini
+default_input = read_config_param('INPUT', 'DEFAULT_INPUT')
+input_file = read_config_param('INPUT', 'INPUT_FILE')
+name_spacing = int(read_config_param('PARSE_PATREON', 'NAME_SPACING'))
+n_col = int(read_config_param('PARSE_PATREON','N_COL'))
+
+
+if default_input == 'Y':
+	path=os.getcwd()
+	csv_files = glob.glob('*.{}'.format('csv'))
+	patreon_reports_name = []
+	patreon_reports_date = []
+	for csv_file in csv_files :
+		standard_csv = re.search('PatreonReport_(\d{4}_\d{2}_\d{2})\.csv', csv_file)
+		if standard_csv is not None :
+			patreon_reports_date.append(datetime.datetime.strptime(standard_csv.group(1), '%Y_%m_%d'))
+	newest_date = max(patreon_reports_date)
+	input_file = newest_date.strftime("PatreonReport_%Y_%m_%d.csv")
 
 this_month = datetime.today().replace(day=1)
 last_month = this_month - timedelta(days=1)
 next_month = this_month + timedelta(days=32)
 	
 # Open input file
-with open(sys.argv[1], 'r') as csv_file:
+with open(input_file, 'r') as csv_file:
 	# Open target file (will be overwritten)
 	with open('anniversary_out.txt', 'w', newline='') as file_out:
 		# Read CSV data
