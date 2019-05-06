@@ -15,29 +15,24 @@ import sys
 from datetime import datetime
 from datetime import timedelta
 
-# import configparser to parse the config file
-import configparser
+# Read parameters from config.ini
+default_input = read_config_param('INPUT', 'DEFAULT_INPUT')
+input_file = read_config_param('INPUT', 'INPUT_FILE')
+name_spacing = int(read_config_param('PARSE_PATREON', 'NAME_SPACING'))
+n_col = int(read_config_param('PARSE_PATREON','N_COL'))
 
-config = configparser.ConfigParser()
-config.read('config.ini')
 
-if config.has_option('INPUT', 'INPUT_FILE') :
-	input_file = config['INPUT']['INPUT_FILE'];
-else :
-	# Error no input file name in config file.
-	print ("Error no INPUT_FILE under INPUT in config file.")
-	
-if config.has_option('OUTPUT', 'NAME_SPACING') :
-	name_spacing = int(config['OUTPUT']['NAME_SPACING']);
-else :
-	# Error no NAME_SPACING under OUTPUT in config file.
-	print ("Error no NAME_SPACING under OUTPUT in config file.")
-	
-if config.has_option('OUTPUT', 'N_COL') :
-	n_col = int(config['OUTPUT']['N_COL']);
-else :
-	# Error no N_COL under OUTPUT in config file.
-	print ("Error no N_COL under OUTPUT in config file.")
+if default_input == 'Y':
+	path=os.getcwd()
+	csv_files = glob.glob('*.{}'.format('csv'))
+	patreon_reports_name = []
+	patreon_reports_date = []
+	for csv_file in csv_files :
+		standard_csv = re.search('PatreonReport_(\d{4}_\d{2}_\d{2})\.csv', csv_file)
+		if standard_csv is not None :
+			patreon_reports_date.append(datetime.datetime.strptime(standard_csv.group(1), '%Y_%m_%d'))
+	newest_date = max(patreon_reports_date)
+	input_file = newest_date.strftime("PatreonReport_%Y_%m_%d.csv")
 
 this_month = datetime.today().replace(day=1)
 last_month = this_month - timedelta(days=1)
