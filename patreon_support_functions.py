@@ -17,5 +17,8 @@ def read_config_param(section, key) :
 		return config[section][key];
 	else :
 		# Error no key found.
-		print ("Error key " + key + " not found under " + section + " in config file.")
-
+		raise exception("Error key " + key + " not found under " + section + " in config file.")
+		exit()
+		
+def column(matrix, i):
+    return [row[i] for row in matrix]
