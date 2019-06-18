@@ -38,8 +38,10 @@ This section of config holds settings for the parse_patreon script.
   
 ### OUTPUT_SORTING
   This parameter is used to decide which column to sort after from the patreon report. Available values are:
+  
   ```NAME```,```CURRENT_PLEDGE```,```LIFETIME_PLEDGE```,```COUNTRY```,```FIRST_PLEDGE_DATE``` and ```MAX_PLEDGED_AMOUNT```
   
 ### OUTPUT_SORTING_ORDER
   This parameter dictates the sorting order of the output. Available values:
+  
   ```ASCENDING``` and ```DECENDING```
